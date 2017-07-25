@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="myApp" class="no-js">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Restful Data Tables</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="../css/select.dataTables.css" rel="stylesheet" type="text/css">
+    <link href="../css/buttons.dataTables.css" rel="stylesheet" type="text/css">
+    <link href="../css/responsive.dataTables.css" rel="stylesheet" type="text/css">
+    <link href="../css/jquery.dataTables.css" rel="stylesheet" type="text/css">
+
+    <script src="../js/jquery.js"></script>
+    <script src="../js/jquery.pjax.js"></script>
+
+    <script src="../js/jquery.dataTables.js"></script>
+    <script src="../js/dataTables.responsive.js"></script>
+
+    <script type="application/javascript">
+
+        $(document).ready(function() {
+            $('#example').DataTable( {
+                "ajax": "../api/customers/paginate",
+                "dom": 'T clear Brtip',
+                "orderCellsTop": true,
+                "pageLength": 5,
+                "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+                "bProcessing": false,
+                "serverSide": true,
+                "select": true,
+                "columns": [
+                    { "data": "id" },
+                    { "data": "name" },
+                    { "data": "email" }
+                ]
+            }).columns().every(function () {
+                var that = this;
+                var id = $(this.header()).attr("name") + "-search"
+                $("#" + id).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that.search(this.value).draw();
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</head>
+<body>
+
+    <table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+        <tr class="tr-header">
+            <th name="id" style="width: 10%">Id</th>
+            <th name="name" style="width: 45%">Nome</th>
+            <th name="email" style="width: 45%">Email</th>
+        </tr>
+        <tr class="tr-filters">
+            <th><input id="id-search" type="text" placeholder="Filter"/></th>
+            <th><input id="name-search" type="text" placeholder="Filter"/></th>
+            <th><input id="email-search" type="text" placeholder="Filter"/></th>
+        </tr>
+        </thead>
+    </table>
+
+</body>
